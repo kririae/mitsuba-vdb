@@ -23,39 +23,29 @@
 
 MTS_NAMESPACE_BEGIN
 
-class MTS_EXPORT_RENDER VdbDataSource : public VolumeDataSource
-{
-public :
+class MTS_EXPORT_RENDER VdbDataSource : public VolumeDataSource {
+ public:
+  VdbDataSource(const Properties &props);
+  VdbDataSource(Stream *stream, InstanceManager *manager);
+  virtual ~VdbDataSource();
+  virtual bool  supportsFloatLookups() const;
+  virtual Float lookupFloat(const Point &p) const;
+  virtual bool  supportsVectorLookups() const;
+  virtual void  serialize(Stream *stream, InstanceManager *manager) const;
+  virtual Float getStepSize() const;
+  virtual Float getMaximumFloatValue() const;
 
-    VdbDataSource(const Properties &props);
+  MTS_DECLARE_CLASS()
 
-    VdbDataSource(Stream *stream, InstanceManager *manager);
+ private:
+  bool open();
 
-    virtual ~VdbDataSource();
-
-	virtual bool supportsFloatLookups() const;
-
-	virtual Float lookupFloat(const Point &p) const;
-
-	virtual bool supportsVectorLookups() const;
-
-    virtual void serialize(Stream *stream, InstanceManager *manager) const;
-
-	virtual Float getStepSize() const;
-
-	virtual Float getMaximumFloatValue() const;
-
-    MTS_DECLARE_CLASS()
-
-private :
-
-    bool open();
-
-    std::string m_filename;
-    std::string m_fieldname;
-    Float m_customStepSize;
-} ;
+  std::string m_filename;
+  std::string m_fieldname;
+  Float       m_customStepSize;
+};
 
 MTS_IMPLEMENT_CLASS_S(VdbDataSource, false, VolumeDataSource);
 MTS_EXPORT_PLUGIN(VdbDataSource, "OpenVDB data source");
+
 MTS_NAMESPACE_END
